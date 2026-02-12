@@ -1,0 +1,52 @@
+name: .NET Code Analysis
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  code-analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout the code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2️⃣ Setup .NET
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      # 3️⃣ Restore dependencies
+      - name: Restore dependencies
+        run: dotnet restore
+
+      # 4️⃣ Build the project
+      - name: Build project
+        run: dotnet build --no-restore --configuration Release
+
+      # 5️⃣ Run Roslyn analysis and export JSON
+      - name: Roslyn Analysis
+        run: |
+          mkdir -p reports
+          dotnet format --verify-no-changes --report reports/roslyn-report.json || true
+
+      # 6️⃣ Run SonarQube analysis and export JSON
+      - name: SonarQube Analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          mkdir -p reports
+          dotnet tool install --global dotnet-sonarscanner
+          export PATH="$PATH:$HOME/.dotnet/tools"
+          dotnet sonarscanner begin /k:"my-project-key" /d:sonar.login="${SONAR_TOKEN}" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+          dotnet build
+          dotnet sonarscanner end /d:sonar.login="${SONAR_TOKEN}"
+
+      # 7️⃣ List the reports to make sure they exist
+      - name: List generated reports
+        run: ls -l reports
