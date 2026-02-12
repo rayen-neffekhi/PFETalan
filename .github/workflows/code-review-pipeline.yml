@@ -43,7 +43,7 @@ jobs:
           mkdir -p reports
           dotnet tool install --global dotnet-sonarscanner
           export PATH="$PATH:$HOME/.dotnet/tools"
-          dotnet sonarscanner begin /k:"my-project-key" /d:sonar.login="${SONAR_TOKEN}" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+          dotnet sonarscanner begin /k:"my-project-key" /d:sonar.login="${SONAR_TOKEN}" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml /o:rayen-neffekhi"
           dotnet build
           dotnet sonarscanner end /d:sonar.login="${SONAR_TOKEN}"
 
