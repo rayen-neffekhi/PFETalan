@@ -13,5 +13,11 @@ namespace BrokenApp
         {
             return a / b;
         }
+
+        // Critical bug: always returns null, will cause NullReferenceException at runtime
+        public static string AddStrings(string a, string b)
+        {
+            return null;
+        }
     }
 }

@@ -1,0 +1,15 @@
+C:\Users\mraye\OneDrive\Bureau\PFE3\broken-dotnet\BrokenApp\bin\Debug\net7.0\BrokenApp.exe
+C:\Users\mraye\OneDrive\Bureau\PFE3\broken-dotnet\BrokenApp\bin\Debug\net7.0\BrokenApp.deps.json
+C:\Users\mraye\OneDrive\Bureau\PFE3\broken-dotnet\BrokenApp\bin\Debug\net7.0\BrokenApp.runtimeconfig.json
+C:\Users\mraye\OneDrive\Bureau\PFE3\broken-dotnet\BrokenApp\bin\Debug\net7.0\BrokenApp.dll
+C:\Users\mraye\OneDrive\Bureau\PFE3\broken-dotnet\BrokenApp\bin\Debug\net7.0\BrokenApp.pdb
+C:\Users\mraye\OneDrive\Bureau\PFE3\broken-dotnet\BrokenApp\obj\Debug\net7.0\BrokenApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\mraye\OneDrive\Bureau\PFE3\broken-dotnet\BrokenApp\obj\Debug\net7.0\BrokenApp.AssemblyInfoInputs.cache
+C:\Users\mraye\OneDrive\Bureau\PFE3\broken-dotnet\BrokenApp\obj\Debug\net7.0\BrokenApp.AssemblyInfo.cs
+C:\Users\mraye\OneDrive\Bureau\PFE3\broken-dotnet\BrokenApp\obj\Debug\net7.0\BrokenApp.csproj.CoreCompileInputs.cache
+C:\Users\mraye\OneDrive\Bureau\PFE3\broken-dotnet\BrokenApp\obj\Debug\net7.0\BrokenApp.sourcelink.json
+C:\Users\mraye\OneDrive\Bureau\PFE3\broken-dotnet\BrokenApp\obj\Debug\net7.0\BrokenApp.dll
+C:\Users\mraye\OneDrive\Bureau\PFE3\broken-dotnet\BrokenApp\obj\Debug\net7.0\refint\BrokenApp.dll
+C:\Users\mraye\OneDrive\Bureau\PFE3\broken-dotnet\BrokenApp\obj\Debug\net7.0\BrokenApp.pdb
+C:\Users\mraye\OneDrive\Bureau\PFE3\broken-dotnet\BrokenApp\obj\Debug\net7.0\BrokenApp.genruntimeconfig.cache
+C:\Users\mraye\OneDrive\Bureau\PFE3\broken-dotnet\BrokenApp\obj\Debug\net7.0\ref\BrokenApp.dll

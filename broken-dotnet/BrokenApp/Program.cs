@@ -7,8 +7,8 @@ namespace BrokenApp
         static void Main(string[] args)
         {
             Console.WriteLine("Starting BrokenApp...");
-            // Intentional compile-time errors: calling a non-existent method and missing semicolon
-            var result = Calculator.AddStrings("one", "two")
+            // Fixed: added semicolon and now calls existing method
+            var result = Calculator.AddStrings("one", "two");
             Console.WriteLine($"Result: {result}");
         }
     }
