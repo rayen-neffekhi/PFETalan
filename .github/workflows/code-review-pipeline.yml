@@ -35,17 +35,24 @@ jobs:
           mkdir -p reports
           dotnet format --verify-no-changes --report reports/roslyn-report.json || true
 
-      # 6️⃣ Run SonarQube analysis and export JSON
-      - name: SonarQube Analysis
+     # 6️⃣ Run SonarCloud analysis
+      - name: SonarCloud Analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mkdir -p reports
           dotnet tool install --global dotnet-sonarscanner
           export PATH="$PATH:$HOME/.dotnet/tools"
-          dotnet sonarscanner begin /k:"my-project-key" /d:sonar.login="${SONAR_TOKEN}" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml /o:rayen-neffekhi"
-          dotnet build
-          dotnet sonarscanner end /d:sonar.login="${SONAR_TOKEN}"
+
+          dotnet sonarscanner begin \
+            /k:"my-project-key" \
+            /o:"rayen-neffekhi" \
+            /d:sonar.login="${SONAR_TOKEN}" \
+            /d:sonar.host.url="https://sonarcloud.io"
+
+          dotnet build --no-restore --configuration Release
+
+          dotnet sonarscanner end \
+            /d:sonar.login="${SONAR_TOKEN}"
 
       # 7️⃣ List the reports to make sure they exist
       - name: List generated reports
