@@ -44,7 +44,7 @@ jobs:
           export PATH="$PATH:$HOME/.dotnet/tools"
 
           dotnet sonarscanner begin \
-            /k:"my-project-key" \
+            /k:"rayen-neffekhi" \
             /o:"rayen-neffekhi" \
             /d:sonar.login="${SONAR_TOKEN}" \
             /d:sonar.host.url="https://sonarcloud.io"
