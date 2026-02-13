@@ -28,8 +28,8 @@ jobs:
       # 4️⃣ Build the project and generate Roslyn SARIF
       - name: Build project with Roslyn SARIF
         run: |
-          mkdir -p reports
-          dotnet build --no-restore --configuration Release -p:ErrorLog=reports/roslyn-report.sarif
+          mkdir -p broken-dotnet/BrokenApp/reports
+          dotnet build broken-dotnet/BrokenApp/BrokenApp.csproj --no-restore --configuration Release -p:ErrorLog=broken-dotnet/BrokenApp/reports/roslyn-report.sarif
 
       # 5️⃣ Run SonarCloud analysis
       - name: SonarCloud Analysis
