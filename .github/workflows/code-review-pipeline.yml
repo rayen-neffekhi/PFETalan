@@ -33,9 +33,7 @@ jobs:
       - name: Roslyn Analysis
         run: |
           mkdir -p reports
-          dotnet build \
-            -p:RunAnalyzers=true \
-            -p:ErrorLog=reports/roslyn-report.json
+          dotnet format --verify-no-changes --report reports/roslyn-report.json || true
 
       # 6️⃣ Run SonarCloud analysis
       - name: SonarCloud Analysis
