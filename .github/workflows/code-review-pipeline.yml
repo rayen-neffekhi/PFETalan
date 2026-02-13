@@ -27,8 +27,9 @@ jobs:
 
       - name: Generate Roslyn JSON
         run: |
-          mkdir -p reports
-          dotnet build -p:ErrorLog=reports/roslyn-report.json
+          mkdir -p $PWD/reports
+          dotnet build -p:ErrorLog=$PWD/reports/roslyn-report.json
+
 
 
       # 6️⃣ Run SonarCloud analysis
