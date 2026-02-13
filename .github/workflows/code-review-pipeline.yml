@@ -66,3 +66,9 @@ jobs:
       # 8️⃣ List the reports to make sure they exist
       - name: List generated reports
         run: ls -l reports
+      # 9️⃣ Exécuter l'orchestrateur pour traiter les rapports
+      - name: Lancer l'orchestrateur .NET
+        run: |
+          dotnet run --project CodeReview.Orchestrator \
+            --roslyn-report "reports/roslyn-report.json" \
+            --sonar-report "reports/sonar-report.json"
