@@ -18,10 +18,7 @@ namespace CodeReview.Orchestrator.Analysis.Roslyn
             _logger = logger;
             _loader = loader;
         }
-              /// <summary>
-        /// Parse Roslyn analyzer results at path into a list of CodeIssue.
-        /// </summary>
-        public async Task<List<CodeIssue>> ParseAsync(string path)
+       public async Task<List<CodeIssue>> ParseAsync(string path)
         {
             var issues = new List<CodeIssue>();
 
@@ -35,110 +32,51 @@ namespace CodeReview.Orchestrator.Analysis.Roslyn
                 }
 
                 using var doc = JsonDocument.Parse(json);
+
+                // SARIF format: root.runs[].results
                 JsonElement root = doc.RootElement;
 
-                // --- SARIF format handling ---
-                if (root.ValueKind == JsonValueKind.Object && root.TryGetProperty("runs", out var runs) && runs.ValueKind == JsonValueKind.Array)
+                if (!root.TryGetProperty("runs", out var runs) || runs.ValueKind != JsonValueKind.Array)
                 {
-                    foreach (var run in runs.EnumerateArray())
-                    {
-                        if (!run.TryGetProperty("results", out var results) || results.ValueKind != JsonValueKind.Array)
-                            continue;
+                    _logger.LogWarning("Roslyn parser: 'runs' array not found in SARIF report.");
+                    return issues;
+                }
 
-                        foreach (var result in results.EnumerateArray())
+                foreach (var run in runs.EnumerateArray())
+                {
+                    if (!run.TryGetProperty("results", out var results) || results.ValueKind != JsonValueKind.Array)
+                        continue;
+
+                    foreach (var r in results.EnumerateArray())
+                    {
+                        string id = r.GetProperty("ruleId").GetString() ?? string.Empty;
+                        string message = r.GetProperty("message").GetProperty("text").GetString() ?? string.Empty;
+                        string severity = r.TryGetProperty("level", out var levelProp) ? levelProp.GetString() ?? "Warning" : "Warning";
+
+                        string? filePath = null;
+                        int? line = null;
+
+                        if (r.TryGetProperty("locations", out var locations) && locations.ValueKind == JsonValueKind.Array)
                         {
-                            string key = result.TryGetProperty("ruleId", out var ruleProp) ? ruleProp.GetString() ?? "" : "";
-                            string severity = result.TryGetProperty("level", out var levelProp) ? levelProp.GetString() ?? "Info" : "Info";
-
-                            string message = "";
-                            if (result.TryGetProperty("message", out var msgProp) && msgProp.TryGetProperty("text", out var textProp))
-                                message = textProp.GetString() ?? "";
-
-                            string filePath = "";
-                            int? line = null;
-
-                            if (result.TryGetProperty("locations", out var locs) && locs.ValueKind == JsonValueKind.Array && locs.GetArrayLength() > 0)
+                            var firstLoc = locations[0];
+                            if (firstLoc.TryGetProperty("resultFile", out var fileProp))
                             {
-                                var firstLoc = locs[0];
-                                if (firstLoc.TryGetProperty("resultFile", out var fileProp))
-                                {
-                                    filePath = fileProp.GetProperty("uri").GetString() ?? "";
-                                    filePath = filePath.Replace("file:///", ""); // clean up URI
-                                    if (fileProp.TryGetProperty("region", out var region) && region.TryGetProperty("startLine", out var lineProp))
-                                        line = lineProp.GetInt32();
-                                }
+                                filePath = fileProp.GetProperty("uri").GetString()?.Replace("file:///", "");
+                                if (fileProp.TryGetProperty("region", out var region) && region.TryGetProperty("startLine", out var startLine))
+                                    line = startLine.GetInt32();
                             }
-
-                            issues.Add(new CodeIssue
-                            {
-                                Source = "Roslyn",
-                                Id = key,
-                                Severity = severity,
-                                Message = message,
-                                FilePath = filePath,
-                                Line = line
-                            });
                         }
+
+                        issues.Add(new CodeIssue
+                        {
+                            Source = "Roslyn",
+                            Id = id,
+                            Severity = severity,
+                            Message = message,
+                            FilePath = filePath,
+                            Line = line
+                        });
                     }
-
-                    _logger.LogInformation($"Roslyn parser (SARIF): mapped {issues.Count} issues to CodeIssue.");
-                    return issues;
-                }
-
-                // --- Fallback: old "issues" array (Sonar-like JSON) ---
-                if (root.ValueKind == JsonValueKind.Object && root.TryGetProperty("issues", out var array))
-                    root = array;
-
-                if (root.ValueKind != JsonValueKind.Array)
-                {
-                    _logger.LogWarning("Roslyn parser: root element is not an array.");
-                    return issues;
-                }
-
-                foreach (var i in root.EnumerateArray())
-                {
-                    string key = i.TryGetProperty("key", out var keyProp) && keyProp.ValueKind == JsonValueKind.String
-                        ? keyProp.GetString() ?? string.Empty
-                        : string.Empty;
-
-                    string severity = i.TryGetProperty("severity", out var sevProp) && sevProp.ValueKind == JsonValueKind.String
-                        ? sevProp.GetString() ?? "Info"
-                        : "Info";
-
-                    string message = i.TryGetProperty("message", out var msgProp) && msgProp.ValueKind == JsonValueKind.String
-                        ? msgProp.GetString() ?? string.Empty
-                        : string.Empty;
-
-                    string component = i.TryGetProperty("component", out var compProp) && compProp.ValueKind == JsonValueKind.String
-                        ? compProp.GetString() ?? string.Empty
-                        : string.Empty;
-
-                    int? line = null;
-                    if (i.TryGetProperty("line", out var lineProp) && lineProp.ValueKind == JsonValueKind.Number)
-                        line = lineProp.GetInt32();
-
-                    string source = i.TryGetProperty("externalRuleEngine", out var engineProp) && engineProp.ValueKind == JsonValueKind.String
-                        ? engineProp.GetString() ?? "Roslyn"
-                        : "Roslyn";
-
-                    string? projectKey = i.TryGetProperty("project", out var projProp) && projProp.ValueKind == JsonValueKind.String
-                        ? projProp.GetString()
-                        : null;
-
-                    string? url = !string.IsNullOrEmpty(projectKey)
-                        ? $"https://sonarcloud.io/project/issues?id={projectKey}&search={key}"
-                        : null;
-
-                    issues.Add(new CodeIssue
-                    {
-                        Source = source,
-                        Id = key,
-                        Severity = severity,
-                        Message = message,
-                        FilePath = component,
-                        Line = line,
-                        Url = url
-                    });
                 }
 
                 _logger.LogInformation($"Roslyn parser: mapped {issues.Count} issues to CodeIssue.");
