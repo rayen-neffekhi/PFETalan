@@ -66,7 +66,8 @@ jobs:
       - name: Check reports
         run: |
           ls -l reports
-          cat reports/roslyn-report.sarif
+          ls -l broken-dotnet/BrokenApp/reports
+          cat broken-dotnet/BrokenApp/reports/roslyn-report.sarif
           cat reports/sonar-report.json
 
       # 8️⃣ Run the orchestrator
