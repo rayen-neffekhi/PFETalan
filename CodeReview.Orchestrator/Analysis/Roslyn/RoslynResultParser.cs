@@ -51,12 +51,14 @@ namespace CodeReview.Orchestrator.Analysis.Roslyn
                             ? idProp.GetString() ?? string.Empty
                             : string.Empty;
 
-                        string message = r.TryGetProperty("message", out var msgProp) &&
-                                         msgProp.TryGetProperty("text", out var textProp) &&
-                                         textProp.ValueKind == JsonValueKind.String
-                            ? textProp.GetString() ?? string.Empty
-                            : string.Empty;
-
+                        string message = string.Empty;
+                            if (r.TryGetProperty("message", out var msgProp))
+                            {
+                                if (msgProp.ValueKind == JsonValueKind.Object && msgProp.TryGetProperty("text", out var textProp))
+                                    message = textProp.GetString() ?? string.Empty;
+                                else if (msgProp.ValueKind == JsonValueKind.String)
+                                    message = msgProp.GetString() ?? string.Empty;
+        }
                         string severity = r.TryGetProperty("level", out var levelProp) && levelProp.ValueKind == JsonValueKind.String
                             ? levelProp.GetString() ?? "Warning"
                             : "Warning";
