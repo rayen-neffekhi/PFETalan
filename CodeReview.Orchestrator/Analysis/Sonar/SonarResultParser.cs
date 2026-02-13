@@ -18,7 +18,7 @@ namespace CodeReview.Orchestrator.Analysis.Sonar
             _logger = logger;
             _loader = loader;
         }
-                public async Task<List<CodeIssue>> ParseAsync(string path)
+        public async Task<List<CodeIssue>> ParseAsync(string path)
         {
             var issues = new List<CodeIssue>();
 
