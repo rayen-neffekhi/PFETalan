@@ -28,8 +28,9 @@ jobs:
       # 4️⃣ Build the project and generate Roslyn SARIF
       - name: Generate Roslyn SARIF
         run: |
-          mkdir -p reports
+          mkdir -p broken-dotnet/BrokenApp/../reports
           dotnet build broken-dotnet/BrokenApp/BrokenApp.csproj -p:ErrorLog=../reports/roslyn-report.sarif
+
 
 
 
@@ -74,5 +75,6 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           dotnet run --project CodeReview.Orchestrator \
-            --roslyn-report "reports/roslyn-report.sarif" \
+            --roslyn-report "broken-dotnet/reports/roslyn-report.sarif" \
             --sonar-report "reports/sonar-report.json"
+
