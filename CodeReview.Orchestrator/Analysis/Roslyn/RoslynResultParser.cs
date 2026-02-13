@@ -18,46 +18,32 @@ namespace CodeReview.Orchestrator.Analysis.Roslyn
             _logger = logger;
             _loader = loader;
         }
-        /// <summary>
-        /// Parse Roslyn analyzer results at path into a list of CodeIssue.
-        /// Supports both root-array JSON and object-with-issues-array JSON.
-        /// </summary>
         public async Task<List<CodeIssue>> ParseAsync(string path)
         {
             var issues = new List<CodeIssue>();
 
             try
             {
-                var json = await _loader.LoadTextAsync(path);
-                if (string.IsNullOrWhiteSpace(json))
+                var content = await _loader.LoadTextAsync(path);
+                if (string.IsNullOrWhiteSpace(content))
                 {
                     _logger.LogWarning($"Roslyn report not found at {path}. Returning empty list.");
                     return issues;
                 }
 
-                using var doc = JsonDocument.Parse(json);
+                using var doc = JsonDocument.Parse(content);
 
-                JsonElement issuesArray;
+                JsonElement root = doc.RootElement;
+                if (root.ValueKind == JsonValueKind.Object && root.TryGetProperty("issues", out var issueArray))
+                    root = issueArray;
 
-                // Handle root array
-                if (doc.RootElement.ValueKind == JsonValueKind.Array)
+                if (root.ValueKind != JsonValueKind.Array)
                 {
-                    issuesArray = doc.RootElement;
-                }
-                // Handle root object with "issues" property
-                else if (doc.RootElement.ValueKind == JsonValueKind.Object &&
-                         doc.RootElement.TryGetProperty("issues", out var tmpArray) &&
-                         tmpArray.ValueKind == JsonValueKind.Array)
-                {
-                    issuesArray = tmpArray;
-                }
-                else
-                {
-                    _logger.LogWarning("Roslyn parser: unexpected JSON format, no issues found.");
+                    _logger.LogWarning("Roslyn parser: root element is not an array.");
                     return issues;
                 }
 
-                foreach (var i in issuesArray.EnumerateArray())
+                foreach (var i in root.EnumerateArray())
                 {
                     string key = i.TryGetProperty("key", out var keyProp) && keyProp.ValueKind == JsonValueKind.String
                         ? keyProp.GetString() ?? string.Empty
@@ -79,13 +65,9 @@ namespace CodeReview.Orchestrator.Analysis.Roslyn
                     if (i.TryGetProperty("line", out var lineProp) && lineProp.ValueKind == JsonValueKind.Number)
                         line = lineProp.GetInt32();
 
-                    string source = i.TryGetProperty("externalRuleEngine", out var engineProp) && engineProp.ValueKind == JsonValueKind.String
-                        ? engineProp.GetString() ?? "Roslyn"
-                        : "Roslyn";
-
                     issues.Add(new CodeIssue
                     {
-                        Source = source,
+                        Source = "Roslyn",
                         Id = key,
                         Severity = severity,
                         Message = message,

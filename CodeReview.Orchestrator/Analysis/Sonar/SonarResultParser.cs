@@ -41,6 +41,14 @@ namespace CodeReview.Orchestrator.Analysis.Sonar
 
                 foreach (var i in issuesArray.EnumerateArray())
                 {
+                    string source = i.TryGetProperty("externalRuleEngine", out var engineProp) && engineProp.ValueKind == JsonValueKind.String
+                        ? engineProp.GetString() ?? "SonarCloud"
+                        : "SonarCloud";
+
+                    // Skip Roslyn issues in Sonar parser
+                    if (string.Equals(source, "Roslyn", StringComparison.OrdinalIgnoreCase))
+                        continue;
+
                     string key = i.TryGetProperty("key", out var keyProp) && keyProp.ValueKind == JsonValueKind.String
                         ? keyProp.GetString() ?? string.Empty
                         : string.Empty;
@@ -60,10 +68,6 @@ namespace CodeReview.Orchestrator.Analysis.Sonar
                     int? line = null;
                     if (i.TryGetProperty("line", out var lineProp) && lineProp.ValueKind == JsonValueKind.Number)
                         line = lineProp.GetInt32();
-
-                    string source = i.TryGetProperty("externalRuleEngine", out var engineProp) && engineProp.ValueKind == JsonValueKind.String
-                        ? engineProp.GetString() ?? "SonarCloud"
-                        : "SonarCloud";
 
                     string? projectKey = i.TryGetProperty("project", out var projProp) && projProp.ValueKind == JsonValueKind.String
                         ? projProp.GetString()

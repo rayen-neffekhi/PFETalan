@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CodeReview.Orchestrator")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a5dc86bb8f12a9e3aa1bc1a04c4cb9310c65ad5b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+605400f2baa464a7b9aa85beb500f1b74c657901")]
 [assembly: System.Reflection.AssemblyProductAttribute("CodeReview.Orchestrator")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CodeReview.Orchestrator")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
