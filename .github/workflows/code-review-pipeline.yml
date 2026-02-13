@@ -29,7 +29,8 @@ jobs:
       - name: Generate Roslyn SARIF
         run: |
           mkdir -p reports
-          dotnet build broken-dotnet/BrokenApp/BrokenApp.csproj -p:ErrorLog=reports/roslyn-report.sarif
+          dotnet build broken-dotnet/BrokenApp/BrokenApp.csproj -p:ErrorLog=../reports/roslyn-report.sarif
+
 
 
       # 5️⃣ Run SonarCloud analysis
