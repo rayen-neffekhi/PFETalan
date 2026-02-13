@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Analysis",
+    "\\Analysis\\Models",
+    "\\Analysis\\Roslyn",
+    "\\Analysis\\Sonar",
+    "\\Configuration",
+    "\\Pipeline"
+  ],
+  "PreviewInSolutionExplorer": false
+}
