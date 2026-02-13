@@ -18,24 +18,28 @@ namespace CodeReview.Orchestrator.Analysis.Roslyn
             _logger = logger;
             _loader = loader;
         }
+        /// <summary>
+        /// Parse Roslyn analyzer results at path into a list of CodeIssue.
+        /// </summary>
         public async Task<List<CodeIssue>> ParseAsync(string path)
         {
             var issues = new List<CodeIssue>();
 
             try
             {
-                var content = await _loader.LoadTextAsync(path);
-                if (string.IsNullOrWhiteSpace(content))
+                var json = await _loader.LoadTextAsync(path);
+                if (string.IsNullOrWhiteSpace(json))
                 {
                     _logger.LogWarning($"Roslyn report not found at {path}. Returning empty list.");
                     return issues;
                 }
 
-                using var doc = JsonDocument.Parse(content);
+                using var doc = JsonDocument.Parse(json);
 
+                // Roslyn report root can be an array or object
                 JsonElement root = doc.RootElement;
-                if (root.ValueKind == JsonValueKind.Object && root.TryGetProperty("issues", out var issueArray))
-                    root = issueArray;
+                if (root.ValueKind == JsonValueKind.Object && root.TryGetProperty("issues", out var array))
+                    root = array;
 
                 if (root.ValueKind != JsonValueKind.Array)
                 {
@@ -65,18 +69,31 @@ namespace CodeReview.Orchestrator.Analysis.Roslyn
                     if (i.TryGetProperty("line", out var lineProp) && lineProp.ValueKind == JsonValueKind.Number)
                         line = lineProp.GetInt32();
 
+                    string source = i.TryGetProperty("externalRuleEngine", out var engineProp) && engineProp.ValueKind == JsonValueKind.String
+                        ? engineProp.GetString() ?? "Roslyn"
+                        : "Roslyn";
+
+                    string? projectKey = i.TryGetProperty("project", out var projProp) && projProp.ValueKind == JsonValueKind.String
+                        ? projProp.GetString()
+                        : null;
+
+                    string? url = !string.IsNullOrEmpty(projectKey)
+                        ? $"https://sonarcloud.io/project/issues?id={projectKey}&search={key}"
+                        : null;
+
                     issues.Add(new CodeIssue
                     {
-                        Source = "Roslyn",
+                        Source = source,
                         Id = key,
                         Severity = severity,
                         Message = message,
                         FilePath = component,
-                        Line = line
+                        Line = line,
+                        Url = url
                     });
                 }
 
-                _logger.LogInformation($"Roslyn parser: mapped {issues.Count} issues from root array/object.");
+                _logger.LogInformation($"Roslyn parser: mapped {issues.Count} issues to CodeIssue.");
             }
             catch (Exception ex)
             {
