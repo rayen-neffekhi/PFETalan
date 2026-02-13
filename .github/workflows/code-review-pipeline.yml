@@ -25,14 +25,11 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
-      # 4️⃣ Build the project and generate Roslyn SARIF
+      # 4️⃣ Build the project and generate Roslyn SARIF in root reports folder
       - name: Generate Roslyn SARIF
         run: |
-          mkdir -p broken-dotnet/BrokenApp/reports
-          dotnet build broken-dotnet/BrokenApp/BrokenApp.csproj -p:ErrorLog=../reports/roslyn-report.sarif
-
-
-
+          mkdir -p reports
+          dotnet build broken-dotnet/BrokenApp/BrokenApp.csproj -p:ErrorLog=reports/roslyn-report.sarif
 
       # 5️⃣ Run SonarCloud analysis
       - name: SonarCloud Analysis
@@ -67,8 +64,7 @@ jobs:
       - name: Check reports
         run: |
           ls -l reports
-          ls -l broken-dotnet/BrokenApp
-          cat broken-dotnet/BrokenApp/reports/roslyn-report.sarif
+          cat reports/roslyn-report.sarif
           cat reports/sonar-report.json
 
       # 8️⃣ Run the orchestrator
@@ -77,6 +73,5 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           dotnet run --project CodeReview.Orchestrator \
-            --roslyn-report "broken-dotnet/reports/roslyn-report.sarif" \
+            --roslyn-report "reports/roslyn-report.sarif" \
             --sonar-report "reports/sonar-report.json"
-
