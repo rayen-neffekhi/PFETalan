@@ -3,56 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Configuration\\LLMSettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Configuration\\LLMSettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Pipeline\\PipelineContext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Pipeline\\PipelineContext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Pipeline\\PipelineRunner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Pipeline\\PipelineRunner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Configuration\\AppSettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Configuration\\AppSettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Analysis\\Sonar\\SonarResultParser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Analysis\\Sonar\\SonarResultParser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Analysis\\Models\\CodeIssue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Analysis\\Models\\CodeIssue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Analysis\\Roslyn\\RoslynResultParser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Analysis\\Roslyn\\RoslynResultParser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\FakeReports\\sonar.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:FakeReports\\sonar.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\FakeReports\\roslyn.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:FakeReports\\roslyn.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Analysis\\IssueAggregator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Analysis\\IssueAggregator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Feedback\\ReviewSummaryBuilder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Feedback\\ReviewSummaryBuilder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Feedback\\PullRequestCommenter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Feedback\\PullRequestCommenter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Analysis\\Models\\CodeIssue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Analysis\\Models\\CodeIssue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -62,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -74,160 +38,55 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "LLMSettings.cs",
-              "DocumentMoniker": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Configuration\\LLMSettings.cs",
-              "RelativeDocumentMoniker": "Configuration\\LLMSettings.cs",
-              "ToolTip": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Configuration\\LLMSettings.cs",
-              "RelativeToolTip": "Configuration\\LLMSettings.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-13T09:21:59.301Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "PipelineContext.cs",
-              "DocumentMoniker": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Pipeline\\PipelineContext.cs",
-              "RelativeDocumentMoniker": "Pipeline\\PipelineContext.cs",
-              "ToolTip": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Pipeline\\PipelineContext.cs",
-              "RelativeToolTip": "Pipeline\\PipelineContext.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-13T09:21:56.55Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "AppSettings.cs",
-              "DocumentMoniker": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Configuration\\AppSettings.cs",
-              "RelativeDocumentMoniker": "Configuration\\AppSettings.cs",
-              "ToolTip": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Configuration\\AppSettings.cs",
-              "RelativeToolTip": "Configuration\\AppSettings.cs",
-              "ViewState": "AQIAACkAAAAAAAAAAAAAACEAAAAWAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-12T09:45:45.953Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "PipelineRunner.cs",
-              "DocumentMoniker": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Pipeline\\PipelineRunner.cs",
-              "RelativeDocumentMoniker": "Pipeline\\PipelineRunner.cs",
-              "ToolTip": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Pipeline\\PipelineRunner.cs",
-              "RelativeToolTip": "Pipeline\\PipelineRunner.cs",
-              "ViewState": "AQIAADAAAAAAAAAAAAAAAEEAAABNAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-12T09:17:23.29Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "CodeIssue.cs",
-              "DocumentMoniker": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Analysis\\Models\\CodeIssue.cs",
-              "RelativeDocumentMoniker": "Analysis\\Models\\CodeIssue.cs",
-              "ToolTip": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Analysis\\Models\\CodeIssue.cs",
-              "RelativeToolTip": "Analysis\\Models\\CodeIssue.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-12T09:17:06.88Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "SonarResultParser.cs",
-              "DocumentMoniker": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Analysis\\Sonar\\SonarResultParser.cs",
-              "RelativeDocumentMoniker": "Analysis\\Sonar\\SonarResultParser.cs",
-              "ToolTip": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Analysis\\Sonar\\SonarResultParser.cs",
-              "RelativeToolTip": "Analysis\\Sonar\\SonarResultParser.cs",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAAB4AAAA9AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-12T09:08:32.484Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
               "Title": "IssueAggregator.cs",
               "DocumentMoniker": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Analysis\\IssueAggregator.cs",
               "RelativeDocumentMoniker": "Analysis\\IssueAggregator.cs",
               "ToolTip": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Analysis\\IssueAggregator.cs",
               "RelativeToolTip": "Analysis\\IssueAggregator.cs",
-              "ViewState": "AQIAAA8AAAAAAAAAAAAAAAAAAAAAAAAA",
+              "ViewState": "AQIAAAQAAAAAAAAAAAAIwCwAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-12T09:07:07.998Z"
+              "WhenOpened": "2026-02-13T10:15:07.148Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "ReviewSummaryBuilder.cs",
-              "DocumentMoniker": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Feedback\\ReviewSummaryBuilder.cs",
-              "RelativeDocumentMoniker": "Feedback\\ReviewSummaryBuilder.cs",
-              "ToolTip": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Feedback\\ReviewSummaryBuilder.cs",
-              "RelativeToolTip": "Feedback\\ReviewSummaryBuilder.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAAcAAAA",
+              "DocumentIndex": 0,
+              "Title": "SonarResultParser.cs",
+              "DocumentMoniker": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Analysis\\Sonar\\SonarResultParser.cs",
+              "RelativeDocumentMoniker": "Analysis\\Sonar\\SonarResultParser.cs",
+              "ToolTip": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Analysis\\Sonar\\SonarResultParser.cs",
+              "RelativeToolTip": "Analysis\\Sonar\\SonarResultParser.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAAAdAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-12T09:01:08.949Z"
+              "WhenOpened": "2026-02-13T10:14:31.345Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "PullRequestCommenter.cs",
-              "DocumentMoniker": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Feedback\\PullRequestCommenter.cs",
-              "RelativeDocumentMoniker": "Feedback\\PullRequestCommenter.cs",
-              "ToolTip": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Feedback\\PullRequestCommenter.cs",
-              "RelativeToolTip": "Feedback\\PullRequestCommenter.cs",
-              "ViewState": "AQIAAAwAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-12T09:01:06.281Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "sonar.json",
-              "DocumentMoniker": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\FakeReports\\sonar.json",
-              "RelativeDocumentMoniker": "FakeReports\\sonar.json",
-              "ToolTip": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\FakeReports\\sonar.json",
-              "RelativeToolTip": "FakeReports\\sonar.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAABAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-02-12T09:00:22.137Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "roslyn.json",
-              "DocumentMoniker": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\FakeReports\\roslyn.json",
-              "RelativeDocumentMoniker": "FakeReports\\roslyn.json",
-              "ToolTip": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\FakeReports\\roslyn.json",
-              "RelativeToolTip": "FakeReports\\roslyn.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-02-12T09:00:16.764Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 1,
               "Title": "RoslynResultParser.cs",
               "DocumentMoniker": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Analysis\\Roslyn\\RoslynResultParser.cs",
               "RelativeDocumentMoniker": "Analysis\\Roslyn\\RoslynResultParser.cs",
               "ToolTip": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Analysis\\Roslyn\\RoslynResultParser.cs",
               "RelativeToolTip": "Analysis\\Roslyn\\RoslynResultParser.cs",
-              "ViewState": "AQIAAAwAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "ViewState": "AQIAADYAAAAAAAAAAAAAAFsAAAARAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-12T08:59:46.987Z"
+              "WhenOpened": "2026-02-13T10:14:10.878Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "DocumentIndex": 3,
+              "Title": "CodeIssue.cs",
+              "DocumentMoniker": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Analysis\\Models\\CodeIssue.cs",
+              "RelativeDocumentMoniker": "Analysis\\Models\\CodeIssue.cs",
+              "ToolTip": "C:\\Users\\mraye\\OneDrive\\Bureau\\PFE 2\\CodeReview.Orchestrator\\Analysis\\Models\\CodeIssue.cs",
+              "RelativeToolTip": "Analysis\\Models\\CodeIssue.cs",
+              "ViewState": "AQIAAAUAAAAAAAAAAAAIwC0AAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-12T08:37:57.84Z"
+              "WhenOpened": "2026-02-13T10:13:21.448Z",
+              "EditorCaption": ""
             }
           ]
         }

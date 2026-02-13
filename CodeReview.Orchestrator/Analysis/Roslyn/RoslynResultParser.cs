@@ -26,6 +26,7 @@ namespace CodeReview.Orchestrator.Analysis.Roslyn
         public async Task<List<CodeIssue>> ParseAsync(string path)
         {
             var issues = new List<CodeIssue>();
+
             try
             {
                 var content = await _loader.LoadTextAsync(path);
@@ -35,8 +36,64 @@ namespace CodeReview.Orchestrator.Analysis.Roslyn
                     return issues;
                 }
 
-                // TODO: Detect SARIF vs custom JSON and map to CodeIssue.
-                _logger.LogInformation("Roslyn parser: loaded content; SARIF/JSON mapping not yet implemented.");
+                using var doc = JsonDocument.Parse(content);
+
+                // SARIF format
+                if (doc.RootElement.TryGetProperty("runs", out var runs))
+                {
+                    foreach (var run in runs.EnumerateArray())
+                    {
+                        if (!run.TryGetProperty("results", out var results))
+                            continue;
+
+                        foreach (var result in results.EnumerateArray())
+                        {
+                            var location = result.GetProperty("locations")[0].GetProperty("physicalLocation");
+
+                            int? line = null;
+                            if (location.TryGetProperty("region", out var region) &&
+                                region.TryGetProperty("startLine", out var startLine))
+                                line = startLine.GetInt32();
+
+                            string filePath = string.Empty;
+                            if (location.TryGetProperty("artifactLocation", out var artifact) &&
+                                artifact.TryGetProperty("uri", out var uri))
+                                filePath = uri.GetString() ?? string.Empty;
+
+                            issues.Add(new CodeIssue
+                            {
+                                Source = "Roslyn",
+                                Id = result.GetProperty("ruleId").GetString() ?? string.Empty,
+                                Severity = result.GetProperty("level").GetString() ?? "Info",
+                                Message = result.GetProperty("message").GetProperty("text").GetString() ?? string.Empty,
+                                FilePath = filePath,
+                                Line = line
+                            });
+                        }
+                    }
+                }
+                // Custom Roslyn JSON format
+                else if (doc.RootElement.TryGetProperty("issues", out var customIssues))
+                {
+                    foreach (var i in customIssues.EnumerateArray())
+                    {
+                        issues.Add(new CodeIssue
+                        {
+                            Source = "Roslyn",
+                            Id = i.GetProperty("ruleId").GetString() ?? string.Empty,
+                            Severity = i.GetProperty("level").GetString() ?? "Info",
+                            Message = i.GetProperty("message").GetProperty("text").GetString() ?? string.Empty,
+                            FilePath = i.GetProperty("filePath").GetString() ?? string.Empty,
+                            Line = i.TryGetProperty("line", out var lineProp) ? lineProp.GetInt32() : (int?)null
+                        });
+                    }
+                }
+                else
+                {
+                    _logger.LogWarning("Roslyn parser: no recognizable SARIF or JSON structure found.");
+                }
+
+                _logger.LogInformation($"Roslyn parser: mapped {issues.Count} issues to CodeIssue.");
             }
             catch (Exception ex)
             {
@@ -47,3 +104,4 @@ namespace CodeReview.Orchestrator.Analysis.Roslyn
         }
     }
 }
+

@@ -18,14 +18,10 @@ namespace CodeReview.Orchestrator.Analysis.Sonar
             _logger = logger;
             _loader = loader;
         }
-
-        /// <summary>
-        /// Parse Sonar JSON at path into a list of CodeIssue.
-        /// TODO: Implement actual Sonar JSON schema mapping. Currently returns empty list when missing.
-        /// </summary>
         public async Task<List<CodeIssue>> ParseAsync(string path)
         {
             var issues = new List<CodeIssue>();
+
             try
             {
                 var json = await _loader.LoadTextAsync(path);
@@ -35,11 +31,29 @@ namespace CodeReview.Orchestrator.Analysis.Sonar
                     return issues;
                 }
 
-                // TODO: Deserialize according to Sonar report JSON schema.
                 using var doc = JsonDocument.Parse(json);
-                // Example: map doc elements into CodeIssue objects.
 
-                _logger.LogInformation("Sonar parser: parsed JSON; mapping to CodeIssue not yet implemented.");
+                if (!doc.RootElement.TryGetProperty("issues", out var issuesArray))
+                {
+                    _logger.LogWarning("Sonar parser: no 'issues' array found in JSON.");
+                    return issues;
+                }
+
+                foreach (var i in issuesArray.EnumerateArray())
+                {
+                    issues.Add(new CodeIssue
+                    {
+                        Source = i.GetProperty("externalRuleEngine").GetString() ?? "SonarCloud",
+                        Id = i.GetProperty("key").GetString() ?? string.Empty,
+                        Severity = i.GetProperty("severity").GetString() ?? "Info",
+                        Message = i.GetProperty("message").GetString() ?? string.Empty,
+                        FilePath = i.GetProperty("component").GetString() ?? string.Empty,
+                        Line = i.TryGetProperty("line", out var lineProp) ? lineProp.GetInt32() : (int?)null,
+                        Url = $"https://sonarcloud.io/project/issues?id={i.GetProperty("project").GetString()}"
+                    });
+                }
+
+                _logger.LogInformation($"Sonar parser: mapped {issues.Count} issues to CodeIssue.");
             }
             catch (Exception ex)
             {

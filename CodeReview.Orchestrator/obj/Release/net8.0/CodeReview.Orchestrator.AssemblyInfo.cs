@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CodeReview.Orchestrator")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+567f0c64f54387f945de870119dbe872b022b1a8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+80fe24dd4852c113b71e639f6a73d4a22c7d49be")]
 [assembly: System.Reflection.AssemblyProductAttribute("CodeReview.Orchestrator")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CodeReview.Orchestrator")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

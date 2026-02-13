@@ -8,5 +8,6 @@
     "\\Configuration",
     "\\Pipeline"
   ],
+  "SelectedNode": "\\Analysis\\Sonar\\SonarResultParser.cs",
   "PreviewInSolutionExplorer": false
 }
