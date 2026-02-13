@@ -18,7 +18,7 @@ namespace CodeReview.Orchestrator.Analysis.Roslyn
             _logger = logger;
             _loader = loader;
         }
-        /// <summary>
+              /// <summary>
         /// Parse Roslyn analyzer results at path into a list of CodeIssue.
         /// </summary>
         public async Task<List<CodeIssue>> ParseAsync(string path)
@@ -35,9 +35,57 @@ namespace CodeReview.Orchestrator.Analysis.Roslyn
                 }
 
                 using var doc = JsonDocument.Parse(json);
-
-                // Roslyn report root can be an array or object
                 JsonElement root = doc.RootElement;
+
+                // --- SARIF format handling ---
+                if (root.ValueKind == JsonValueKind.Object && root.TryGetProperty("runs", out var runs) && runs.ValueKind == JsonValueKind.Array)
+                {
+                    foreach (var run in runs.EnumerateArray())
+                    {
+                        if (!run.TryGetProperty("results", out var results) || results.ValueKind != JsonValueKind.Array)
+                            continue;
+
+                        foreach (var result in results.EnumerateArray())
+                        {
+                            string key = result.TryGetProperty("ruleId", out var ruleProp) ? ruleProp.GetString() ?? "" : "";
+                            string severity = result.TryGetProperty("level", out var levelProp) ? levelProp.GetString() ?? "Info" : "Info";
+
+                            string message = "";
+                            if (result.TryGetProperty("message", out var msgProp) && msgProp.TryGetProperty("text", out var textProp))
+                                message = textProp.GetString() ?? "";
+
+                            string filePath = "";
+                            int? line = null;
+
+                            if (result.TryGetProperty("locations", out var locs) && locs.ValueKind == JsonValueKind.Array && locs.GetArrayLength() > 0)
+                            {
+                                var firstLoc = locs[0];
+                                if (firstLoc.TryGetProperty("resultFile", out var fileProp))
+                                {
+                                    filePath = fileProp.GetProperty("uri").GetString() ?? "";
+                                    filePath = filePath.Replace("file:///", ""); // clean up URI
+                                    if (fileProp.TryGetProperty("region", out var region) && region.TryGetProperty("startLine", out var lineProp))
+                                        line = lineProp.GetInt32();
+                                }
+                            }
+
+                            issues.Add(new CodeIssue
+                            {
+                                Source = "Roslyn",
+                                Id = key,
+                                Severity = severity,
+                                Message = message,
+                                FilePath = filePath,
+                                Line = line
+                            });
+                        }
+                    }
+
+                    _logger.LogInformation($"Roslyn parser (SARIF): mapped {issues.Count} issues to CodeIssue.");
+                    return issues;
+                }
+
+                // --- Fallback: old "issues" array (Sonar-like JSON) ---
                 if (root.ValueKind == JsonValueKind.Object && root.TryGetProperty("issues", out var array))
                     root = array;
 
