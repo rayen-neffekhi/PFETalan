@@ -41,25 +41,45 @@ namespace CodeReview.Orchestrator.Analysis.Sonar
 
                 foreach (var i in issuesArray.EnumerateArray())
                 {
-                    i.TryGetProperty("key", out var keyProp);
-                    i.TryGetProperty("severity", out var sevProp);
-                    i.TryGetProperty("message", out var msgProp);
-                    i.TryGetProperty("component", out var compProp);
-                    i.TryGetProperty("line", out var lineProp);
-                    i.TryGetProperty("project", out var projectProp);
-                    i.TryGetProperty("externalRuleEngine", out var engineProp);
+                    string key = i.TryGetProperty("key", out var keyProp) && keyProp.ValueKind == JsonValueKind.String
+                        ? keyProp.GetString() ?? string.Empty
+                        : string.Empty;
 
-                    string projectKey = projectProp.GetString() ?? string.Empty;
+                    string severity = i.TryGetProperty("severity", out var sevProp) && sevProp.ValueKind == JsonValueKind.String
+                        ? sevProp.GetString() ?? "Info"
+                        : "Info";
+
+                    string message = i.TryGetProperty("message", out var msgProp) && msgProp.ValueKind == JsonValueKind.String
+                        ? msgProp.GetString() ?? string.Empty
+                        : string.Empty;
+
+                    string component = i.TryGetProperty("component", out var compProp) && compProp.ValueKind == JsonValueKind.String
+                        ? compProp.GetString() ?? string.Empty
+                        : string.Empty;
+
+                    int? line = null;
+                    if (i.TryGetProperty("line", out var lineProp) && lineProp.ValueKind == JsonValueKind.Number)
+                        line = lineProp.GetInt32();
+
+                    string source = i.TryGetProperty("externalRuleEngine", out var engineProp) && engineProp.ValueKind == JsonValueKind.String
+                        ? engineProp.GetString() ?? "SonarCloud"
+                        : "SonarCloud";
+
+                    string? projectKey = i.TryGetProperty("project", out var projProp) && projProp.ValueKind == JsonValueKind.String
+                        ? projProp.GetString()
+                        : null;
+
+                    string? url = !string.IsNullOrEmpty(projectKey) ? $"https://sonarcloud.io/project/issues?id={projectKey}" : null;
 
                     issues.Add(new CodeIssue
                     {
-                        Source = engineProp.GetString() ?? "SonarCloud",
-                        Id = keyProp.GetString() ?? string.Empty,
-                        Severity = sevProp.GetString() ?? "Info",
-                        Message = msgProp.GetString() ?? string.Empty,
-                        FilePath = compProp.GetString() ?? string.Empty,
-                        Line = lineProp.ValueKind == JsonValueKind.Number ? lineProp.GetInt32() : (int?)null,
-                        Url = !string.IsNullOrEmpty(projectKey) ? $"https://sonarcloud.io/project/issues?id={projectKey}" : null
+                        Source = source,
+                        Id = key,
+                        Severity = severity,
+                        Message = message,
+                        FilePath = component,
+                        Line = line,
+                        Url = url
                     });
                 }
 
