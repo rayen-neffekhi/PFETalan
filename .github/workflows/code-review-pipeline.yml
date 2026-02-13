@@ -21,18 +21,17 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      # 3️⃣ Roslyn 
+      # 3️⃣ Restore dependencies
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Generate Roslyn JSON
+      # 4️⃣ Build the project and generate Roslyn SARIF
+      - name: Build project with Roslyn SARIF
         run: |
-          mkdir -p $PWD/reports
-          dotnet build -p:ErrorLog=$PWD/reports/roslyn-report.json
+          mkdir -p reports
+          dotnet build --no-restore --configuration Release -p:ErrorLog=reports/roslyn-report.sarif
 
-
-
-      # 6️⃣ Run SonarCloud analysis
+      # 5️⃣ Run SonarCloud analysis
       - name: SonarCloud Analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -51,7 +50,7 @@ jobs:
           dotnet sonarscanner end \
             /d:sonar.login="${SONAR_TOKEN}"
 
-      # 7️⃣ Export SonarCloud issues as JSON
+      # 6️⃣ Export SonarCloud issues as JSON
       - name: Export SonarCloud issues
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -60,18 +59,18 @@ jobs:
           "https://sonarcloud.io/api/issues/search?componentKeys=rayen-neffekhi_PFETalan" \
           -o reports/sonar-report.json
 
-      # 8️⃣ List the reports to make sure they exist
+      # 7️⃣ List the reports to make sure they exist
       - name: Check reports
         run: |
           ls -l reports
-          cat reports/roslyn-report.json
+          cat reports/roslyn-report.sarif
           cat reports/sonar-report.json
 
-      # 9️⃣ Exécuter l'orchestrateur pour traiter les rapports
-      - name: Lancer l'orchestrateur .NET
+      # 8️⃣ Run the orchestrator
+      - name: Run CodeReview Orchestrator
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           dotnet run --project CodeReview.Orchestrator \
-            --roslyn-report "reports/roslyn-report.json" \
+            --roslyn-report "reports/roslyn-report.sarif" \
             --sonar-report "reports/sonar-report.json"
