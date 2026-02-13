@@ -72,6 +72,8 @@ jobs:
 
       # 9️⃣ Exécuter l'orchestrateur pour traiter les rapports
       - name: Lancer l'orchestrateur .NET
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           dotnet run --project CodeReview.Orchestrator \
             --roslyn-report "reports/roslyn-report.json" \
