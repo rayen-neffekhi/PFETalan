@@ -30,7 +30,8 @@ jobs:
         run: |
           mkdir -p reports
           dotnet build broken-dotnet/BrokenApp/BrokenApp.csproj \
-            -p:ErrorLog=../../reports/roslyn-report.sarif
+          -p:ErrorLog=reports/roslyn-report.sarif
+
 
 
       # 5️⃣ Run SonarCloud analysis
