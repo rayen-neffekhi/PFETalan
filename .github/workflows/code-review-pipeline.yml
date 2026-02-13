@@ -35,7 +35,7 @@ jobs:
           mkdir -p reports
           dotnet format --verify-no-changes --report reports/roslyn-report.json || true
 
-     # 6️⃣ Run SonarCloud analysis
+      # 6️⃣ Run SonarCloud analysis
       - name: SonarCloud Analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -54,6 +54,15 @@ jobs:
           dotnet sonarscanner end \
             /d:sonar.login="${SONAR_TOKEN}"
 
-      # 7️⃣ List the reports to make sure they exist
+      # 7️⃣ Export SonarCloud issues as JSON
+      - name: Export SonarCloud issues
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          curl -u "${SONAR_TOKEN}:" \
+          "https://sonarcloud.io/api/issues/search?componentKeys=rayen-neffekhi_PFETalan" \
+          -o reports/sonar-report.json
+
+      # 8️⃣ List the reports to make sure they exist
       - name: List generated reports
         run: ls -l reports
