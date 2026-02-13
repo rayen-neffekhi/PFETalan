@@ -64,8 +64,12 @@ jobs:
           -o reports/sonar-report.json
 
       # 8️⃣ List the reports to make sure they exist
-      - name: List generated reports
-        run: ls -l reports
+      - name: Check reports
+        run: |
+          ls -l reports
+          cat reports/roslyn-report.json
+          cat reports/sonar-report.json
+
       # 9️⃣ Exécuter l'orchestrateur pour traiter les rapports
       - name: Lancer l'orchestrateur .NET
         run: |
