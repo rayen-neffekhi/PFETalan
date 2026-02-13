@@ -26,10 +26,11 @@ jobs:
         run: dotnet restore
 
       # 4️⃣ Build the project and generate Roslyn SARIF
-      - name: Generate Roslyn JSON
+      - name: Generate Roslyn SARIF
         run: |
-          mkdir -p broken-dotnet/BrokenApp/reports
-          dotnet build broken-dotnet/BrokenApp/BrokenApp.csproj -p:ErrorLog=broken-dotnet/BrokenApp/reports/roslyn-report.sarif
+          mkdir -p reports
+          cd broken-dotnet/BrokenApp
+          dotnet build -p:ErrorLog=reports/roslyn-report.sarif
 
 
       # 5️⃣ Run SonarCloud analysis
