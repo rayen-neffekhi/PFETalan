@@ -16,7 +16,7 @@ namespace CodeReview.Orchestrator.Configuration
         /// <summary>
         /// Path to Roslyn analyzers report (JSON or SARIF). TODO: Set by CI step.
         /// </summary>
-        public string RoslynReportPath { get; set; } = "reports/roslyn-report.json";
+        public string RoslynReportPath { get; set; } = "reports/roslyn-report.sarif";
 
         /// <summary>
         /// Whether to call the LLM. In CI, control via pipeline variables.
