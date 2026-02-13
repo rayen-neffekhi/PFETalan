@@ -21,19 +21,15 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      # 3️⃣ Restore dependencies
+      # 3️⃣ Roslyn 
       - name: Restore dependencies
         run: dotnet restore
 
-      # 4️⃣ Build the project
-      - name: Build project
-        run: dotnet build --no-restore --configuration Release
-
-      # 5️⃣ Run Roslyn analysis and export JSON
-      - name: Roslyn Analysis
+      - name: Generate Roslyn JSON
         run: |
           mkdir -p reports
-          dotnet format --verify-no-changes --report reports/roslyn-report.json || true
+          dotnet build -p:ErrorLog=reports/roslyn-report.json
+
 
       # 6️⃣ Run SonarCloud analysis
       - name: SonarCloud Analysis
