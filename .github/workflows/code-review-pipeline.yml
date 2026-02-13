@@ -28,10 +28,9 @@ jobs:
       # 4️⃣ Build the project and generate Roslyn SARIF
       - name: Generate Roslyn SARIF
         run: |
-          mkdir -p reports
           cd broken-dotnet/BrokenApp
+          mkdir -p reports
           dotnet build -p:ErrorLog=reports/roslyn-report.sarif
-
 
       # 5️⃣ Run SonarCloud analysis
       - name: SonarCloud Analysis
@@ -62,12 +61,11 @@ jobs:
           "https://sonarcloud.io/api/issues/search?componentKeys=rayen-neffekhi_PFETalan" \
           -o reports/sonar-report.json
 
-
       # 7️⃣ List the reports to make sure they exist
       - name: Check reports
         run: |
-          ls -l reports
           ls -l broken-dotnet/BrokenApp/reports
+          ls -l reports
           cat broken-dotnet/BrokenApp/reports/roslyn-report.sarif
           cat reports/sonar-report.json
 
