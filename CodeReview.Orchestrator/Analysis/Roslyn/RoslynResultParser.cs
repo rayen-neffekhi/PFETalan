@@ -18,65 +18,83 @@ namespace CodeReview.Orchestrator.Analysis.Roslyn
             _logger = logger;
             _loader = loader;
         }
-
- public async Task<List<CodeIssue>> ParseAsync(string path)
+        /// <summary>
+        /// Parse Roslyn analyzer results at path into a list of CodeIssue.
+        /// Supports both root-array JSON and object-with-issues-array JSON.
+        /// </summary>
+        public async Task<List<CodeIssue>> ParseAsync(string path)
         {
             var issues = new List<CodeIssue>();
 
             try
             {
-                var content = await _loader.LoadTextAsync(path);
-                if (string.IsNullOrWhiteSpace(content))
+                var json = await _loader.LoadTextAsync(path);
+                if (string.IsNullOrWhiteSpace(json))
                 {
                     _logger.LogWarning($"Roslyn report not found at {path}. Returning empty list.");
                     return issues;
                 }
 
-                using var doc = JsonDocument.Parse(content);
+                using var doc = JsonDocument.Parse(json);
 
+                JsonElement issuesArray;
+
+                // Handle root array
                 if (doc.RootElement.ValueKind == JsonValueKind.Array)
                 {
-                    // Root is an array of issues (custom Roslyn JSON)
-                    foreach (var result in doc.RootElement.EnumerateArray())
-                    {
-                        issues.Add(MapCustomRoslynIssue(result));
-                    }
-
-                    _logger.LogInformation($"Roslyn parser: mapped {issues.Count} issues from root array.");
+                    issuesArray = doc.RootElement;
                 }
-                else if (doc.RootElement.ValueKind == JsonValueKind.Object)
+                // Handle root object with "issues" property
+                else if (doc.RootElement.ValueKind == JsonValueKind.Object &&
+                         doc.RootElement.TryGetProperty("issues", out var tmpArray) &&
+                         tmpArray.ValueKind == JsonValueKind.Array)
                 {
-                    // SARIF format
-                    if (doc.RootElement.TryGetProperty("runs", out var runs) && runs.ValueKind == JsonValueKind.Array)
-                    {
-                        foreach (var run in runs.EnumerateArray())
-                        {
-                            if (!run.TryGetProperty("results", out var results) || results.ValueKind != JsonValueKind.Array)
-                                continue;
-
-                            foreach (var result in results.EnumerateArray())
-                                issues.Add(MapSarifIssue(result));
-                        }
-
-                        _logger.LogInformation($"Roslyn parser: mapped {issues.Count} issues from SARIF object.");
-                    }
-                    // Custom JSON under "issues" property
-                    else if (doc.RootElement.TryGetProperty("issues", out var customIssues) && customIssues.ValueKind == JsonValueKind.Array)
-                    {
-                        foreach (var result in customIssues.EnumerateArray())
-                            issues.Add(MapCustomRoslynIssue(result));
-
-                        _logger.LogInformation($"Roslyn parser: mapped {issues.Count} issues from 'issues' property.");
-                    }
-                    else
-                    {
-                        _logger.LogWarning("Roslyn parser: unrecognized object structure.");
-                    }
+                    issuesArray = tmpArray;
                 }
                 else
                 {
-                    _logger.LogWarning("Roslyn parser: root JSON is neither object nor array.");
+                    _logger.LogWarning("Roslyn parser: unexpected JSON format, no issues found.");
+                    return issues;
                 }
+
+                foreach (var i in issuesArray.EnumerateArray())
+                {
+                    string key = i.TryGetProperty("key", out var keyProp) && keyProp.ValueKind == JsonValueKind.String
+                        ? keyProp.GetString() ?? string.Empty
+                        : string.Empty;
+
+                    string severity = i.TryGetProperty("severity", out var sevProp) && sevProp.ValueKind == JsonValueKind.String
+                        ? sevProp.GetString() ?? "Info"
+                        : "Info";
+
+                    string message = i.TryGetProperty("message", out var msgProp) && msgProp.ValueKind == JsonValueKind.String
+                        ? msgProp.GetString() ?? string.Empty
+                        : string.Empty;
+
+                    string component = i.TryGetProperty("component", out var compProp) && compProp.ValueKind == JsonValueKind.String
+                        ? compProp.GetString() ?? string.Empty
+                        : string.Empty;
+
+                    int? line = null;
+                    if (i.TryGetProperty("line", out var lineProp) && lineProp.ValueKind == JsonValueKind.Number)
+                        line = lineProp.GetInt32();
+
+                    string source = i.TryGetProperty("externalRuleEngine", out var engineProp) && engineProp.ValueKind == JsonValueKind.String
+                        ? engineProp.GetString() ?? "Roslyn"
+                        : "Roslyn";
+
+                    issues.Add(new CodeIssue
+                    {
+                        Source = source,
+                        Id = key,
+                        Severity = severity,
+                        Message = message,
+                        FilePath = component,
+                        Line = line
+                    });
+                }
+
+                _logger.LogInformation($"Roslyn parser: mapped {issues.Count} issues from root array/object.");
             }
             catch (Exception ex)
             {
@@ -84,65 +102,6 @@ namespace CodeReview.Orchestrator.Analysis.Roslyn
             }
 
             return issues;
-        }
-
-        private CodeIssue MapSarifIssue(JsonElement result)
-        {
-            string message = string.Empty;
-            if (result.TryGetProperty("message", out var msgProp) && msgProp.ValueKind == JsonValueKind.Object)
-                message = msgProp.TryGetProperty("text", out var txtProp) ? txtProp.GetString() ?? string.Empty : string.Empty;
-
-            int? line = null;
-            string filePath = string.Empty;
-
-            if (result.TryGetProperty("locations", out var locArray) && locArray.ValueKind == JsonValueKind.Array && locArray.GetArrayLength() > 0)
-            {
-                var loc = locArray[0];
-                if (loc.TryGetProperty("physicalLocation", out var phys) && phys.ValueKind == JsonValueKind.Object)
-                {
-                    if (phys.TryGetProperty("artifactLocation", out var artifact) &&
-                        artifact.TryGetProperty("uri", out var uriProp))
-                        filePath = uriProp.GetString() ?? string.Empty;
-
-                    if (phys.TryGetProperty("region", out var region) &&
-                        region.TryGetProperty("startLine", out var startLine))
-                        line = startLine.GetInt32();
-                }
-            }
-
-            return new CodeIssue
-            {
-                Source = "Roslyn",
-                Id = result.TryGetProperty("ruleId", out var rid) ? rid.GetString() ?? string.Empty : string.Empty,
-                Severity = result.TryGetProperty("level", out var lvl) ? lvl.GetString() ?? "Info" : "Info",
-                Message = message,
-                FilePath = filePath,
-                Line = line
-            };
-        }
-
-        private CodeIssue MapCustomRoslynIssue(JsonElement result)
-        {
-            string message = string.Empty;
-            if (result.TryGetProperty("message", out var msgProp))
-            {
-                if (msgProp.ValueKind == JsonValueKind.Object && msgProp.TryGetProperty("text", out var txtProp))
-                    message = txtProp.GetString() ?? string.Empty;
-                else if (msgProp.ValueKind == JsonValueKind.String)
-                    message = msgProp.GetString() ?? string.Empty;
-            }
-
-            int? line = result.TryGetProperty("line", out var lineProp) && lineProp.ValueKind == JsonValueKind.Number ? lineProp.GetInt32() : (int?)null;
-
-            return new CodeIssue
-            {
-                Source = "Roslyn",
-                Id = result.TryGetProperty("ruleId", out var rid) ? rid.GetString() ?? string.Empty : string.Empty,
-                Severity = result.TryGetProperty("level", out var lvl) ? lvl.GetString() ?? "Info" : "Info",
-                Message = message,
-                FilePath = result.TryGetProperty("filePath", out var fp) ? fp.GetString() ?? string.Empty : string.Empty,
-                Line = line
-            };
         }
     }
 }
