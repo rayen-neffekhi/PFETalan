@@ -18,23 +18,21 @@ namespace CodeReview.Orchestrator.Analysis.Roslyn
             _logger = logger;
             _loader = loader;
         }
-       public async Task<List<CodeIssue>> ParseAsync(string path)
+   public async Task<List<CodeIssue>> ParseAsync(string path)
         {
             var issues = new List<CodeIssue>();
 
             try
             {
-                var json = await _loader.LoadTextAsync(path);
-                if (string.IsNullOrWhiteSpace(json))
+                var content = await _loader.LoadTextAsync(path);
+                if (string.IsNullOrWhiteSpace(content))
                 {
                     _logger.LogWarning($"Roslyn report not found at {path}. Returning empty list.");
                     return issues;
                 }
 
-                using var doc = JsonDocument.Parse(json);
-
-                // SARIF format: root.runs[].results
-                JsonElement root = doc.RootElement;
+                using var doc = JsonDocument.Parse(content);
+                var root = doc.RootElement;
 
                 if (!root.TryGetProperty("runs", out var runs) || runs.ValueKind != JsonValueKind.Array)
                 {
@@ -49,21 +47,38 @@ namespace CodeReview.Orchestrator.Analysis.Roslyn
 
                     foreach (var r in results.EnumerateArray())
                     {
-                        string id = r.GetProperty("ruleId").GetString() ?? string.Empty;
-                        string message = r.GetProperty("message").GetProperty("text").GetString() ?? string.Empty;
-                        string severity = r.TryGetProperty("level", out var levelProp) ? levelProp.GetString() ?? "Warning" : "Warning";
+                        string id = r.TryGetProperty("ruleId", out var idProp) && idProp.ValueKind == JsonValueKind.String
+                            ? idProp.GetString() ?? string.Empty
+                            : string.Empty;
+
+                        string message = r.TryGetProperty("message", out var msgProp) &&
+                                         msgProp.TryGetProperty("text", out var textProp) &&
+                                         textProp.ValueKind == JsonValueKind.String
+                            ? textProp.GetString() ?? string.Empty
+                            : string.Empty;
+
+                        string severity = r.TryGetProperty("level", out var levelProp) && levelProp.ValueKind == JsonValueKind.String
+                            ? levelProp.GetString() ?? "Warning"
+                            : "Warning";
 
                         string? filePath = null;
                         int? line = null;
 
-                        if (r.TryGetProperty("locations", out var locations) && locations.ValueKind == JsonValueKind.Array)
+                        if (r.TryGetProperty("locations", out var locations) && locations.ValueKind == JsonValueKind.Array && locations.GetArrayLength() > 0)
                         {
                             var firstLoc = locations[0];
                             if (firstLoc.TryGetProperty("resultFile", out var fileProp))
                             {
-                                filePath = fileProp.GetProperty("uri").GetString()?.Replace("file:///", "");
-                                if (fileProp.TryGetProperty("region", out var region) && region.TryGetProperty("startLine", out var startLine))
+                                filePath = fileProp.TryGetProperty("uri", out var uriProp) && uriProp.ValueKind == JsonValueKind.String
+                                    ? uriProp.GetString()?.Replace("file:///", "")
+                                    : null;
+
+                                if (fileProp.TryGetProperty("region", out var region) &&
+                                    region.TryGetProperty("startLine", out var startLine) &&
+                                    startLine.ValueKind == JsonValueKind.Number)
+                                {
                                     line = startLine.GetInt32();
+                                }
                             }
                         }
 
@@ -79,7 +94,7 @@ namespace CodeReview.Orchestrator.Analysis.Roslyn
                     }
                 }
 
-                _logger.LogInformation($"Roslyn parser: mapped {issues.Count} issues to CodeIssue.");
+                _logger.LogInformation($"Roslyn parser: mapped {issues.Count} issues from SARIF.");
             }
             catch (Exception ex)
             {
