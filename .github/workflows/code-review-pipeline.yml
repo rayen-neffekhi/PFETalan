@@ -56,9 +56,11 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
+          mkdir -p reports
           curl -u "${SONAR_TOKEN}:" \
           "https://sonarcloud.io/api/issues/search?componentKeys=rayen-neffekhi_PFETalan" \
           -o reports/sonar-report.json
+
 
       # 7️⃣ List the reports to make sure they exist
       - name: Check reports
@@ -73,5 +75,5 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           dotnet run --project CodeReview.Orchestrator \
-            --roslyn-report "reports/roslyn-report.sarif" \
+            --roslyn-report "broken-dotnet/BrokenApp/reports/roslyn-report.sarif" \
             --sonar-report "reports/sonar-report.json"
