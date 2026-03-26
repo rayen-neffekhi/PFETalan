@@ -28,6 +28,7 @@ public class BadService
                 while (reader.Read())
                 {
                     Console.WriteLine(reader["Name"]);
+                    Console.WriteLine("test agent trigger");
                 }
             }
         }
