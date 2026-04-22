@@ -60,7 +60,7 @@ public class BadService
             try
             {
                 var client = new System.Net.Http.HttpClient();
-                var result = client.GetStringAsync(url).Result; // BUG: .Result blocks the thread (deadlock risk)
+                var result = await client.GetStringAsync(url); // BUG: .Result blocks the thread (deadlock risk)
                 return result;
             }
             catch (Exception)
